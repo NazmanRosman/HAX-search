@@ -18,6 +18,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
     this.hexCode= '';
     this.theme= '';
     this.icon= '';
+    this.url= '';
     
 
   }
@@ -32,6 +33,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
       hexCode: { type: String },
       theme: { type: String },
       icon: { type: String },
+      url: { type: String },
     };
   }
 
@@ -52,7 +54,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
       justify-content: center;
       align-items: center;
       gap: var(--ddd-spacing-3, 20px);
-
+      flex-wrap: wrap;
 
       width: fit-content;
       padding: var(--ddd-spacing-5, 20px);
@@ -77,6 +79,8 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
     .title{
       font-size:24px;
       font-weight: var(--ddd-font-weight-bold, bold);
+      text-align: center;
+      margin-bottom:  var(--ddd-spacing-4);
     }
 
     .container img {
@@ -84,26 +88,22 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
       height: 150px;
       
     }
-    a div{
-      text-decoration: none;
-      color:  var(--ddd-theme-primary); 
+    .title a{
+      /* text-decoration: none; */
+      color:  unset; 
     }
-    .course-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+    .info-row {
+        display: flex;
+        /* justify-content: flex-start; */
+        /* gap: 10px; */
+    }
 
-.info-row {
-    display: flex;
-    /* justify-content: flex-start; */
-    /* gap: 10px; */
-}
+    .label {
+        width: 120px; /* Adjust based on your desired label width */
+        font-weight: bold;
+    }
 
-.label {
-    width: 120px; /* Adjust based on your desired label width */
-    font-weight: bold;
-}
+
 
     `];
   }
@@ -113,45 +113,56 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
   render() {
     return html`
     <div class="container" style="--site-hex-code: ${this.hexCode};">
-        <!-- <img src="${this.source}" alt="${this.description}"/> -->
 
 
       <div class="image-container" >
         <div class="logo" ?hidden="${this.logo === ''}">
           <img src ="${this.logo}">
         </div>
-        
+
       </div>
+      
       <div class="text-container" >
-        <div class="info-row">
-          <span class="label"><strong>Description</strong></span>
-          <span>: Create Your Own course</span>
-      </div>
-      <div class="info-row">
-          <span class="label"><strong>Date created</strong></span>
-          <span>: Wed, 03 May 2023 18:12:36 GMT</span>
-      </div>
-      <div class="info-row">
-          <span class="label"><strong>Date updated</strong></span>
-          <span>: Wed, 30 Oct 2024 19:21:20 GMT</span>
-      </div>
-      <div class="info-row">
-          <span class="label"><strong>Theme</strong></span>
-          <span>: Polaris - Invent</span>
-      </div>
 
         <div class="title" ?hidden="${this.title === ''}">
-          <span class="icon" ?hidden="${this.icon === ''}">
-            <simple-icon icon="${this.icon}"></simple-icon>
-          </span>
-          ${this.title}
-        </div>
-        <div class="description" ?hidden="${this.description === ''}">Description: ${this.description}</div>
-        <div class="dateCreated" ?hidden="${this.dateCreated === ''}">Date created: ${this.dateCreated} </div>
-        <div class="dateUpdated" ?hidden="${this.dateUpdated === ''}">Date updated: ${this.dateUpdated}        </div>
-        <div class="theme" ?hidden="${this.theme === ''}">Theme: ${this.theme}</div> 
+          <a href="${this.url}" target="_blank" rel="noopener noreferrer">
+            <span class="icon" ?hidden="${this.icon === ''}">
+              <simple-icon icon="${this.icon}"></simple-icon>
+            </span>
+            ${this.title}
+          </a>
+        </div> 
 
-     </div>
+        <div ?hidden="${this.description === ''}">
+          <div class="info-row">
+            <span class="label"><strong>Description</strong></span>
+            <span>: ${this.description}</span>
+          </div>
+        </div>
+        
+        <div ?hidden="${this.dateCreated === ''}">
+          <div class="info-row">
+              <span class="label"><strong>Date created</strong></span>
+              <span>: ${this.dateCreated}</span>
+          </div>
+        </div>
+
+        <div ?hidden="${this.dateUpdated === ''}">
+          <div class="info-row">
+              <span class="label"><strong>Date updated</strong></span>
+              <span>: ${this.dateUpdated} </span>
+          </div>
+        </div>
+
+        <div ?hidden="${this.theme === ''}">
+
+          <div class="info-row">
+              <span class="label"><strong>Theme</strong></span>
+              <span>: ${this.theme}</span>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     `;

@@ -6,6 +6,8 @@ import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
 import "./site-details.js";
+import "./site-card.js";
+
 
 import '@haxtheweb/hax-iconset/hax-iconset.js';
 import '@haxtheweb/simple-icon/simple-icon.js';
@@ -100,7 +102,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         /* height: 30px; */
         font: inherit;
       }
-      div.search{
+      .search{
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
@@ -108,6 +110,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         max-width: 90vw;
         margin: auto;
         justify-content: center;
+        
 
       }
       .search-button{
@@ -116,11 +119,13 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         padding: 0 20px;
         text-align: center;
         margin: auto;   
+        font-size: inherit;
       }
       .search-input{
         height: 50px;
         flex: 1 1 0;
         padding: 0 10px;
+        font-size: inherit;
       }
       site-details{
         margin: auto;
@@ -147,27 +152,30 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       logo='${this.searchQuery}${this.data.metadata.site.logo}'      
       dateCreated=${this.dateToString(this.data.metadata.site.created)}
       dateUpdated=${this.dateToString(this.data.metadata.site.updated)}
-
       hexCode=${this.data.metadata.theme.variables.hexCode}
       theme=${this.data.metadata.theme.name}
-      icon=${this.data.metadata.theme.variables.icon}      
+      icon=${this.data.metadata.theme.variables.icon}  
+      url=${this.searchQuery}   
     ></site-details>
     ` }
 
   <div class="results">
 
     ${this.searchResults.map((item) => 
-      console.log()
-      // html`
-      // <nasa-image
-      //   source="${item.links[0].href}"
-      //   title="${item.data[0].title}"
-      //   description="${item.data[0].description}"
-      // ></nasa-image>
-      // `
+      html`
+      <site-card
+        title = ${item.title}
+        description =  ${item.description}
+        imageSrc =  ''
+        dateUpdated =  ${this.dateToString(item.metadata.updated)}
+        pageLink =  '${this.searchQuery}${item.slug}'
+        pageHtml =  '${this.searchQuery}${item.location}'
+        
+      ></site-card>
+      `
       
     )}
-    </div>
+  </div>
 </div>
   `;}
 
@@ -192,7 +200,7 @@ updateResults() {
         this.searchResults = data.items;
         this.loading = false;
         this.data = data;
-        // console.log(this.data.title)
+        console.log(this.searchResults)
 
       }  
     });
