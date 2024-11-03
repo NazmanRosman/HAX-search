@@ -156,7 +156,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
   <div class="search">
     <input class="search-input" placeholder="Press '/' to begin searching, hit enter to search"  
     @keydown="${(e)=>{if(e.key==='Enter'){this.search();}}}"/>  <!--pressing enter calls this.inputChanged-->
-    <button class="search-button" @click="${this.search}">Search</button> <!--pressing search button calls this.inputChanged-->
+    <button class="search-button" @click="${this.search}"  label="analyze button">Analyze</button> <!--pressing search button calls this.inputChanged-->
   </div>
   
 <!-- render html if this.data exists -->
@@ -167,13 +167,13 @@ ${this.data === undefined ?
       <site-details 
       title=${this.data.title}
       description=${this.data.description}
-      logo='${this.searchQuery}${this.data.metadata.site.logo}'      
+      logo='${this.url}${this.data.metadata.site.logo}'      
       dateCreated=${this.dateToString(this.data.metadata.site.created)}
       dateUpdated=${this.dateToString(this.data.metadata.site.updated)}
       hexCode=${this.data.metadata.theme.variables.hexCode}
       theme=${this.data.metadata.theme.name}
       icon=${this.data.metadata.theme.variables.icon}  
-      url=${this.searchQuery}   
+      url=${this.url}   
     ></site-details>
   `
   }
@@ -191,8 +191,8 @@ ${this.data === undefined ?
           description =  ${item.description}
           imageSrc =  ${this.getImgSrc(item)}
           dateUpdated =  ${this.dateToString(item.metadata.updated)}
-          pageLink =  '${this.searchQuery}${item.slug}'
-          pageHtml =  '${this.searchQuery}${item.location}'
+          pageLink =  '${this.url}${item.slug}'
+          pageHtml =  '${this.url}${item.location}'
           
         ></site-card>
         `  
@@ -208,9 +208,14 @@ search(e) {
   this.updateResults();
 }
 async updateResults() {
-  const url = `${this.searchQuery}/site.json`;;
+  
+  if(this.searchQuery)
+  this.url = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
+  console.log(this.url);
+  const jsonUrl = `${this.url}/site.json`;
+  
   try {
-    const response = await fetch(url);
+    const response = await fetch(jsonUrl);
     if (!response.ok) {
       // throw new Error(`Response status: ${response.status}`);
     }
@@ -222,7 +227,7 @@ async updateResults() {
       this.loading = false;
       
       this.data = data;
-      console.log(this.data);
+      // console.log(this.data);
 
     }  
   } catch (error) {
@@ -239,7 +244,7 @@ getImgSrc(item){
   let images =item.metadata.images;
   if(images){
     if(images.length >0){
-      return(this.searchQuery+images[0]);
+      return(this.url+images[0]);
     }
   }
 

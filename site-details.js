@@ -91,11 +91,10 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
       /* text-decoration: none; */
       color:  unset; 
     }
-    .info-row {
+    /* .info-row {
         display: flex;
-        /* justify-content: flex-start; */
-        /* gap: 10px; */
-    }
+
+    } */
 
     .label {
         width: 120px; /* Adjust based on your desired label width */
