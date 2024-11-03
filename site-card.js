@@ -16,8 +16,6 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
     this.dateUpdated =  ''
     this.pageLink =  ''
     this.pageHtml =  ''
-    
-
   }
 
   static get properties() {
@@ -42,7 +40,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
 
     }
 
-    .container{
+    .card-container{
       display: flex;
       flex-direction: column;
       /* justify-content: center; */
@@ -50,7 +48,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
       gap: var(--ddd-spacing-3, 20px);
       flex-wrap: wrap;
 
-      width: 400px;
+      /* max-width: 400px;  */
       padding: var(--ddd-spacing-5, 20px);
       border: var(--ddd-border-sm, black solid 3px);
       font-family: var(--ddd-font-primary, roboto);
@@ -76,15 +74,22 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
       /* margin-bottom:  var(--ddd-spacing-4); */
     }
 
-    .container img {
+    .card-container img {
       display: block;
       height: 150px;
+      margin: auto;
       
     }
     a div{
-      text-decoration: none;
+      /* text-decoration: none; */
       color:  var(--ddd-theme-primary); 
     }
+
+    a[target="_blank"]::after {
+      content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);
+      margin: 0 3px 0 5px;
+    }
+
     .info-row {
         display: flex;
         flex-direction: column;
@@ -98,6 +103,11 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
         width: 120px; /* Adjust based on your desired label width */
         font-weight: bold;
     }
+    .title a{
+      /* text-decoration: none;  */
+      color: unset; 
+    }
+
 
 
     `];
@@ -107,64 +117,53 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
 
   render() {
     return html`
-    <div class="container" style="--site-hex-code: ${this.hexCode};">
-      
-      <div class="title" ?hidden="${this.title === ''}">
-          <!-- <span class="icon" ?hidden="${this.icon === ''}">
-            <simple-icon icon="${this.icon}"></simple-icon>
-          </span> -->
-          ${this.title}
-      </div> 
-      
-      <div class="image-container">
-        <div class="image" ?hidden="${this.imageSrc === ''}">
-          <img src ="${this.imageSrc}">
-        </div>
+    
+      <div class="card-container" style="--site-hex-code: ${this.hexCode};">
 
-      </div>
-      
-      <div class="text-container" >
-
-
-      
-
-        <div ?hidden="${this.description === ''}">
-          <div class="info-row">
-            <span class="label"><strong>Description</strong></span>
-            <span>${this.description}</span>
-          </div>
-        </div>       
-
-        <div ?hidden="${this.dateUpdated === ''}">
-          <div class="info-row">
-              <span class="label"><strong>Date updated</strong></span>
-              <span>${this.dateUpdated} </span>
-          </div>
-        </div>
-
-        <div ?hidden="${this.pageLink === ''}">
-          <div class="info-row">
-              <span class="label">
-                <a href="${this.pageLink}" target="_blank" rel="noopener noreferrer"><strong>Link to page</strong></a></span>
-              
-          </div>
-        </div>
-        <div ?hidden="${this.pageHtml=== ''}">
-          <div class="info-row">
-                <a href="${this.pageHtml}" target="_blank" rel="noopener noreferrer"><strong>View page source</strong></a>
-              
-          </div>
+       
+        <div class="title" ?hidden="${this.title === ''}">
+          <a href="${this.pageLink}" target="_blank" rel="noopener noreferrer">
+            ${this.title}
+          </a>
+        </div> 
+        
+        
+        <div class="image-container" ?hidden="${this.imageSrc === ''}">
+          <a href="${this.imageSrc}" target="_blank" rel="noopener noreferrer">
+            <img src="${this.imageSrc}" alt="${this.imageSrc}">
+          </a>
         </div>
         
+        <div class="text-container" >
 
+          <div ?hidden="${this.description === ''}">
+            <div class="info-row">
+              <span class="label"><strong>Description</strong></span>
+              <span>${this.description}</span>
+            </div>
+          </div>       
 
+          <div ?hidden="${this.dateUpdated === ''}">
+            <div class="info-row">
+                <span class="label"><strong>Date updated</strong></span>
+                <span>${this.dateUpdated} </span>
+            </div>
+          </div>
 
+          <div ?hidden="${this.pageHtml=== ''}">
+            <div class="info-row">
+                <a href="${this.pageHtml}" target="_blank" rel="noopener noreferrer"><strong>View page source</strong></a>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
+   
 
 
     `;
   }
+
   static get tag() {
     return "site-card";
   }

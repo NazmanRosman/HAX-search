@@ -43,9 +43,8 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
 
     :host {
       display:block;
-      /* max-width: 240px;
-      padding: var(--ddd-spacing-5, 20px);
-      border: var(--ddd-border-sm, black solid 3px); */
+      /* max-width: 240px; */
+
     }
 
     .container{
@@ -58,7 +57,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
 
       width: fit-content;
       padding: var(--ddd-spacing-5, 20px);
-      border: var(--ddd-border-sm, black solid 3px);
+      /* border: var(--ddd-border-sm, black solid 3px); */
       font-family: var(--ddd-font-primary, roboto);
       font-size:16px;
       color: var(--ddd-theme-primary);
@@ -101,9 +100,14 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
     .label {
         width: 120px; /* Adjust based on your desired label width */
         font-weight: bold;
+
     }
+    /* https://stackoverflow.com/questions/1899772/what-is-the-best-practice-for-showing-an-icon-next-to-text */
+    a[target="_blank"]::after {
+      content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);
+      vertical-align: text-top;
 
-
+    }
 
     `];
   }
@@ -117,7 +121,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
 
       <div class="image-container" >
         <div class="logo" ?hidden="${this.logo === ''}">
-          <img src ="${this.logo}">
+          <img src ="${this.logo}" alt="${this.logo}">
         </div>
 
       </div>

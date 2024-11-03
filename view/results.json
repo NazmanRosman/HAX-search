@@ -75,7 +75,7 @@
         "title": "What is HAX?",
         "description": "A new way of authoringWrite HTML without knowing it, HAX is here to transform web publishing. Watch why HAX is different than past CMS solutions as well as pillars of development and where the platf",
         "metadata": {
-            "created": "1687956682",
+            "created": "1687956682",/
             "updated": 1730316077,
             "images": [
                 "files/HAX-The-Web.jpg",

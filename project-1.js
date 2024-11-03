@@ -30,6 +30,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
     this.title = "Hax Search";
     this.loading = false;
     this.searchResults = [];
+    // this.data = undefined;
 
     this.registerLocalization({
       context: this,
@@ -48,6 +49,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       loading: { type: Boolean, reflect: true },
       searchResults: { type: Array, attribute: "search-results" },
       searchQuery: { type: String, attribute: "search-query" },
+      data: { type: Object, reflect:true },
     };
   }
   
@@ -67,6 +69,10 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
     return [super.styles,
     css`
       :host {
+      * {
+          margin: 0;          
+          padding: 0;      
+      }
         color: var(--ddd-theme-primary);
         background-color: var(--ddd-theme-accent);
         font-family: var(--ddd-font-primary);
@@ -74,10 +80,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         padding: 0;
         margin: 0;
       }
-      * {
-          margin: 0;          
-          padding: 0;      
-      }
+
       div{
         font: inherit;
       }
@@ -89,26 +92,26 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       .container{
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: var(--ddd-spacing-5, 20px);
+        max-width: 2000px;
+        padding: 50px;
+        align-items: center;
+        /* margin: 100px; */
       }
 
-      .results{
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-      }
+
 
       .search{
         /* height: 30px; */
         font: inherit;
       }
-      .search{
+      .container .search{
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
         width: 500px;
         max-width: 90vw;
-        margin: auto;
+        /* margin: 0 auto; */
         justify-content: center;
         
 
@@ -127,9 +130,21 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         padding: 0 10px;
         font-size: inherit;
       }
-      site-details{
-        margin: auto;
+      .results{
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ddd-spacing-4, 16px);
+        justify-content: space-evenly;
+        
       }
+      site-card {
+        flex: 1 1 400px;
+      }
+      site-details{
+        flex: 1 1 0;
+        /* margin: 0 auto; */
+      }
+
     `];
   }
 
@@ -145,8 +160,11 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
   </div>
   
 <!-- render html if this.data exists -->
-  ${this.data && html`
-    <site-details 
+${this.data === undefined ? 
+  html`<p>Site not compatible</p>` 
+  : 
+  html`
+      <site-details 
       title=${this.data.title}
       description=${this.data.description}
       logo='${this.searchQuery}${this.data.metadata.site.logo}'      
@@ -157,58 +175,75 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       icon=${this.data.metadata.theme.variables.icon}  
       url=${this.searchQuery}   
     ></site-details>
-    ` }
+  `
+  }
+ 
+
 
   <div class="results">
 
-    ${this.searchResults.map((item) => 
+    ${this.searchResults.length===0
+    ? console.log('empty')
+    : this.searchResults.map((item) =>
       html`
-      <site-card
-        title = ${item.title}
-        description =  ${item.description}
-        imageSrc =  ''
-        dateUpdated =  ${this.dateToString(item.metadata.updated)}
-        pageLink =  '${this.searchQuery}${item.slug}'
-        pageHtml =  '${this.searchQuery}${item.location}'
-        
-      ></site-card>
-      `
-      
+        <site-card
+          title = ${item.title}
+          description =  ${item.description}
+          imageSrc =  ${this.getImgSrc(item)}
+          dateUpdated =  ${this.dateToString(item.metadata.updated)}
+          pageLink =  '${this.searchQuery}${item.slug}'
+          pageHtml =  '${this.searchQuery}${item.location}'
+          
+        ></site-card>
+        `  
     )}
   </div>
 </div>
   `;}
+  // this.searchResults.map((item) => 
+
 
 search(e) {
   this.searchQuery = this.shadowRoot.querySelector('.search-input').value; // set this.value to string in search bar
   this.updateResults();
 }
+async updateResults() {
+  const url = `${this.searchQuery}/site.json`;;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      // throw new Error(`Response status: ${response.status}`);
+    }
 
-updateResults() {
-  //if this.searchQuery exists, fetch and update this.searchResults
-  //else, this.searchResults = []
-  this.loading = true;
-  if (this.searchQuery) {
-        
-        this.jsonUrl = `${this.searchQuery}/site.json`;
-        fetch(this.jsonUrl)
-    .then(d => d.ok ? d.json(): {})
-    .then(data => {
-      // console.log(data)
-      if (data.items) {
-        this.searchResults = [];
-        this.searchResults = data.items;
-        this.loading = false;
-        this.data = data;
-        console.log(this.searchResults)
+    const data = await response.json();
+    if (data.items) {
+      this.searchResults = [];
+      this.searchResults = data.items;
+      this.loading = false;
+      
+      this.data = data;
+      console.log(this.data);
 
-      }  
-    });
-    
-  }      
+    }  
+  } catch (error) {
+    // console.error(error.message);
+    this.searchResults = [];
+    this.data = undefined;
+    console.log('unaivalable');
+
+  }
 }
 
 
+getImgSrc(item){
+  let images =item.metadata.images;
+  if(images){
+    if(images.length >0){
+      return(this.searchQuery+images[0]);
+    }
+  }
+
+}
 
 dateToString(timestamp){
   const date = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
