@@ -6,7 +6,7 @@
 .DS_Store
 
 ## npm
-/node_modules/
+
 
 /npm-debug.log
 
@@ -32,7 +32,7 @@ custom-elements.json
 .DS_Store
 
 ## npm
-/node_modules/
+/node_modules/*
 /npm-debug.log
 
 ## testing
@@ -51,4 +51,12 @@ storybook-static
 custom-elements.json
 .vercel
 
+# Ignore everything in node_modules
+node_modules/*
+
+# Unignore the @haxtheweb directory within node_modules
 !node_modules/@haxtheweb
+
+# Ignore everything in node_modules/@haxtheweb, except simple-icon
+node_modules/@haxtheweb/*
+!node_modules/@haxtheweb/simple-icon
