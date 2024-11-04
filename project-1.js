@@ -201,7 +201,7 @@ ${this.data === undefined ?
   </div>
 </div>
   `;}
-  // this.searchResults.map((item) => 
+
 
 
 search(e) {
@@ -234,9 +234,8 @@ updateResults() {
   .catch(error =>{
     this.searchResults = [];
     this.data = undefined;
-    console.log('fetch failed');
+    console.log('fetch failesd');
   });
-    
 
 }
 
