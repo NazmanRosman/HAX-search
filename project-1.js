@@ -208,37 +208,36 @@ search(e) {
   this.searchQuery = this.shadowRoot.querySelector('.search-input').value; // set this.value to string in search bar
   this.updateResults();
 }
-async updateResults() {
-  
+
+updateResults() {
+
   this.url = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
   const jsonUrl = `${this.url}site.json`;
-  console.log(jsonUrl);
+
   
-  try {
-    const response = await fetch(jsonUrl);
-    if (!response.ok) {
-      // throw new Error(`Response status: ${response.status}`);
-      this.searchResults = [];
-      this.data = undefined;
-      console.log('fetch failed');
-    }
-    const data = await response.json();
+  this.loading = true;
+  fetch(jsonUrl)
+  .then(response => {
+    if (!response.ok) {                                   
+        throw new Error("HTTP error " + response.status); 
+    }                                                     
+    return response.json();
+    })
+  .then(data => {
     if (data.items) {
       this.searchResults = [];
       this.searchResults = data.items;
-      this.loading = false;
-      
       this.data = data;
-      // console.log(this.data);
-
-    } 
-  } catch (error) {
-    // console.error(error.message);
+      this.loading = false;
+      this.requestUpdate();
+    }})
+  .catch(error =>{
     this.searchResults = [];
     this.data = undefined;
     console.log('fetch failed');
+  });
+    
 
-  }
 }
 
 
