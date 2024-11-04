@@ -47,9 +47,9 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       ...super.properties,
       title: { type: String },
       loading: { type: Boolean, reflect: true },
-      searchResults: { type: Array, attribute: "search-results" },
+      searchResults: { type: Array, attribute: "search-results", reflect: true },
       searchQuery: { type: String, attribute: "search-query" },
-      data: { type: Object, reflect:true },
+      data: { type: Object, reflect: true },
     };
   }
   
@@ -69,16 +69,17 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
     return [super.styles,
     css`
       :host {
-      * {
-          margin: 0;          
-          padding: 0;      
-      }
+
         color: var(--ddd-theme-primary);
         background-color: var(--ddd-theme-accent);
         font-family: var(--ddd-font-primary);
         font-size: 16px;
         padding: 0;
         margin: 0;
+      }
+      * {
+          margin: 0;          
+          padding: 0;      
       }
 
       div{
@@ -96,7 +97,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         max-width: 2000px;
         padding: 50px;
         align-items: center;
-        /* margin: 100px; */
+        margin: auto;
       }
 
 
@@ -154,7 +155,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
 <div class="container">
   <h2>${this.title}</h2>
   <div class="search">
-    <input class="search-input" placeholder="Press '/' to begin searching, hit enter to search"  
+    <input class="search-input" placeholder="Enter 'haxtheweb.org'"  
     @keydown="${(e)=>{if(e.key==='Enter'){this.search();}}}"/>  <!--pressing enter calls this.inputChanged-->
     <button class="search-button" @click="${this.search}"  label="analyze button">Analyze</button> <!--pressing search button calls this.inputChanged-->
   </div>
@@ -183,7 +184,7 @@ ${this.data === undefined ?
   <div class="results">
 
     ${this.searchResults.length===0
-    ? console.log('empty')
+    ? console.log('searchResults empty')
     : this.searchResults.map((item) =>
       html`
         <site-card
@@ -209,17 +210,18 @@ search(e) {
 }
 async updateResults() {
   
-  if(this.searchQuery)
   this.url = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
-  console.log(this.url);
-  const jsonUrl = `${this.url}/site.json`;
+  const jsonUrl = `${this.url}site.json`;
+  console.log(jsonUrl);
   
   try {
     const response = await fetch(jsonUrl);
     if (!response.ok) {
       // throw new Error(`Response status: ${response.status}`);
+      this.searchResults = [];
+      this.data = undefined;
+      console.log('fetch failed');
     }
-
     const data = await response.json();
     if (data.items) {
       this.searchResults = [];
@@ -229,15 +231,17 @@ async updateResults() {
       this.data = data;
       // console.log(this.data);
 
-    }  
+    } 
   } catch (error) {
     // console.error(error.message);
     this.searchResults = [];
     this.data = undefined;
-    console.log('unaivalable');
+    console.log('fetch failed');
 
   }
 }
+
+
 
 
 getImgSrc(item){
