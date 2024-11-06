@@ -27,7 +27,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
 
   constructor() {
     super();
-    this.title = "Hax Search";
+    this.title = "HAX Search";
     this.loading = false;
     this.searchResults = [];
     // this.data = undefined;
@@ -85,7 +85,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       div{
         font: inherit;
       }
-      :host([loading]) .results {
+      :host([loading]) .content {
         opacity: 0.1;
         visibility: hidden;
         height: 1px;
@@ -153,73 +153,88 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
   render() {
     return html`
 <div class="container">
+
   <h2>${this.title}</h2>
+
   <div class="search">
     <input class="search-input" placeholder="Enter 'haxtheweb.org'"  
     @keydown="${(e)=>{if(e.key==='Enter'){this.search();}}}"/>  <!--pressing enter calls this.inputChanged-->
     <button class="search-button" @click="${this.search}"  label="analyze button">Analyze</button> <!--pressing search button calls this.inputChanged-->
   </div>
   
-<!-- render html if this.data exists -->
-${this.data === undefined ? 
-  html`<p>Site not compatible</p>` 
-  : 
-  html`
-      <site-details 
-      title=${this.data.title}
-      description=${this.data.description}
-      logo='${this.url}${this.data.metadata.site.logo}'      
-      dateCreated=${this.dateToString(this.data.metadata.site.created)}
-      dateUpdated=${this.dateToString(this.data.metadata.site.updated)}
-      hexCode=${this.data.metadata.theme.variables.hexCode}
-      theme=${this.data.metadata.theme.name}
-      icon=${this.data.metadata.theme.variables.icon}  
-      url=${this.url}   
-    ></site-details>
-  `
-  }
- 
-
-
-  <div class="results">
-
-    ${this.searchResults.length===0
-    ? console.log('searchResults empty')
-    : this.searchResults.map((item) =>
+  <!-- loading -->
+  ${(this.loading)? html`loading results for '${this.searchQuery}'`: html`
+    <!-- check if this.data is defined -->
+    ${(this.data === undefined)? 
+      html`<div class="results">The site '${this.searchQuery}' is not compatible</div>` 
+      : 
       html`
-        <site-card
-          title = ${item.title}
-          description =  ${item.description}
-          imageSrc =  ${this.getImgSrc(item)}
-          dateUpdated =  ${this.dateToString(item.metadata.updated)}
-          pageLink =  '${this.url}${item.slug}'
-          pageHtml =  '${this.url}${item.location}'
-          
-        ></site-card>
-        `  
-    )}
-  </div>
+        <!-- site preview section -->
+        <div class="content">
+          <site-details 
+          title=${this.data.title}
+          description=${this.data.description}
+          logo='${this.url}${this.data.metadata.site.logo}'      
+          dateCreated=${this.dateToString(this.data.metadata.site.created)}
+          dateUpdated=${this.dateToString(this.data.metadata.site.updated)}
+          hexCode=${this.data.metadata.theme.variables.hexCode}
+          theme=${this.data.metadata.theme.name}
+          icon=${this.data.metadata.theme.variables.icon}  
+          url=${this.url}   
+          ></site-details>  
+        </div>
+
+        <!-- cards container -->
+        <div class="results content">
+          ${this.searchResults.length===0
+            ? console.log('searchResults empty')
+            : this.searchResults.map((item) =>
+              html`
+                <site-card
+                  title = ${item.title}
+                  description =  ${item.description}
+                  imageSrc =  ${this.getImgSrc(item)}
+                  dateUpdated =  ${this.dateToString(item.metadata.updated)}
+                  pageLink =  '${this.url}${item.slug}'
+                  pageHtml =  '${this.url}${item.location}'
+                  
+                ></site-card>
+              `  
+            )
+          }
+        </div>
+      `
+    }
+  `}
 </div>
-  `;}
+`;}
 
 
+updated(){
+  if(this.loading ){
+    html`suck`
+  }
+  
+}
 
 search(e) {
   this.searchQuery = this.shadowRoot.querySelector('.search-input').value; // set this.value to string in search bar
   this.updateResults();
+  
 }
 
 updateResults() {
 
+  this.loading=true;
   this.url = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
   const jsonUrl = `${this.url}site.json`;
 
   
-  this.loading = true;
+  
   fetch(jsonUrl)
   .then(response => {
     if (!response.ok) {                                   
-        throw new Error("HTTP error " + response.status); 
+        // throw new Error("HTTP error " + response.status); 
     }                                                     
     return response.json();
     })
@@ -227,11 +242,13 @@ updateResults() {
     if (data.items) {
       this.searchResults = [];
       this.searchResults = data.items;
+      this.data=undefined;
       this.data = data;
       this.loading = false;
       this.requestUpdate();
     }})
   .catch(error =>{
+    this.loading = false;
     this.searchResults = [];
     this.data = undefined;
     console.log('fetch failesd');
