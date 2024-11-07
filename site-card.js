@@ -85,7 +85,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
       color:  var(--ddd-theme-primary); 
     }
 
-    a[target="_blank"]::after {
+    a[target="_blank"].text::after {
       content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);
       margin: 0 3px 0 5px;
     }
@@ -122,7 +122,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
 
        
         <div class="title" ?hidden="${this.title === ''}">
-          <a href="${this.pageLink}" target="_blank" rel="noopener noreferrer">
+          <a class="text" href="${this.pageLink}" target="_blank" rel="noopener noreferrer">
             ${this.title}
           </a>
         </div> 
@@ -152,7 +152,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
 
           <div ?hidden="${this.pageHtml=== ''}">
             <div class="info-row">
-                <a href="${this.pageHtml}" target="_blank" rel="noopener noreferrer"><strong>View page source</strong></a>
+                <a class="text" href="${this.pageHtml}" target="_blank" rel="noopener noreferrer"><strong>View page source</strong></a>
             </div>
           </div>
 

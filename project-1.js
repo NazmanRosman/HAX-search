@@ -29,6 +29,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
     super();
     this.title = "HAX Search";
     this.loading = false;
+    this.isValid = false;
     this.searchResults = [];
     // this.data = undefined;
 
@@ -50,6 +51,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       searchResults: { type: Array, attribute: "search-results", reflect: true },
       searchQuery: { type: String, attribute: "search-query" },
       data: { type: Object, reflect: true },
+      isValid: { type: Boolean, reflect: true },
     };
   }
   
@@ -103,7 +105,6 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
 
 
       .search{
-        /* height: 30px; */
         font: inherit;
       }
       .container .search{
@@ -157,16 +158,16 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
   <h2>${this.title}</h2>
 
   <div class="search">
-    <input class="search-input" placeholder="Enter 'haxtheweb.org'"  
-    @keydown="${(e)=>{if(e.key==='Enter'){this.search();}}}"/>  <!--pressing enter calls this.inputChanged-->
-    <button class="search-button" @click="${this.search}"  label="analyze button">Analyze</button> <!--pressing search button calls this.inputChanged-->
+    <input class="search-input" placeholder="Enter 'haxtheweb.org'"  @input="${this.updateSearchQuery}"
+    @keydown="${(e)=>{if(e.key==='Enter'){this.updateResults();}}}"/>  <!--pressing enter calls this.inputChanged-->
+    <button class="search-button" @click="${this.updateResults}"  label="analyze button">Analyze</button> <!--pressing search button calls this.inputChanged-->
   </div>
   
   <!-- loading -->
-  ${(this.loading)? html`loading results for '${this.searchQuery}'`: html`
+  ${(this.loading)? html`Loading results for '${this.url}'`: html`
     <!-- check if this.data is defined -->
     ${(this.data === undefined)? 
-      html`<div class="results">The site '${this.searchQuery}' is not compatible</div>` 
+      html`<div>The site '${this.url}' is not compatible</div>` 
       : 
       html`
         <!-- site preview section -->
@@ -197,7 +198,6 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
                   dateUpdated =  ${this.dateToString(item.metadata.updated)}
                   pageLink =  '${this.url}${item.slug}'
                   pageHtml =  '${this.url}${item.location}'
-                  
                 ></site-card>
               `  
             )
@@ -211,16 +211,11 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
 
 
 updated(){
-  if(this.loading ){
-    html`suck`
-  }
   
 }
 
-search(e) {
-  this.searchQuery = this.shadowRoot.querySelector('.search-input').value; // set this.value to string in search bar
-  this.updateResults();
-  
+updateSearchQuery(){
+  this.searchQuery = this.shadowRoot.querySelector('.search-input').value;
 }
 
 updateResults() {
