@@ -5,6 +5,7 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
+import { ifDefined } from 'lit/directives/if-defined.js';
 import "./site-details.js";
 import "./site-card.js";
 
@@ -29,9 +30,10 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
     super();
     this.title = "HAX Search";
     this.loading = false;
-    this.isValid = false;
     this.searchResults = [];
-    // this.data = undefined;
+    this.searchQuery = '';
+    this.data = null;
+    this.url = '';
 
     this.registerLocalization({
       context: this,
@@ -51,7 +53,8 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       searchResults: { type: Array, attribute: "search-results", reflect: true },
       searchQuery: { type: String, attribute: "search-query" },
       data: { type: Object, reflect: true },
-      isValid: { type: Boolean, reflect: true },
+      url: { type: String },
+      
     };
   }
   
@@ -166,7 +169,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
   <!-- loading -->
   ${(this.loading)? html`Loading results for '${this.url}'`: html`
     <!-- check if this.data is defined -->
-    ${(this.data === undefined)? 
+    ${(this.data === null)? 
       html`<div>The site '${this.url}' is not compatible</div>` 
       : 
       html`
@@ -192,12 +195,13 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
             : this.searchResults.map((item) =>
               html`
                 <site-card
-                  title = ${item.title}
-                  description =  ${item.description}
-                  imageSrc =  ${this.getImgSrc(item)}
-                  dateUpdated =  ${this.dateToString(item.metadata.updated)}
-                  pageLink =  '${this.url}${item.slug}'
-                  pageHtml =  '${this.url}${item.location}'
+                  title=${item.title}
+                  description=${item.description}
+                  imageSrc='${ifDefined(this.getImgSrc(item))}'
+                  dateUpdated=${this.dateToString(item.metadata.updated)}
+                  pageLink='${this.url}${item.slug}'
+                  pageHtml='${this.url}${item.location}'
+                  readTime=${(item.metadata.readtime)}
                 ></site-card>
               `  
             )
@@ -220,7 +224,7 @@ updateSearchQuery(){
 
 updateResults() {
 
-  this.loading=true;
+  this.loading = true;
   this.url = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
   const jsonUrl = `${this.url}site.json`;
 
@@ -237,7 +241,7 @@ updateResults() {
     if (data.items) {
       this.searchResults = [];
       this.searchResults = data.items;
-      this.data=undefined;
+      this.data=null;
       this.data = data;
       this.loading = false;
       this.requestUpdate();
@@ -245,7 +249,7 @@ updateResults() {
   .catch(error =>{
     this.loading = false;
     this.searchResults = [];
-    this.data = undefined;
+    this.data = null;
     console.log('fetch failesd');
   });
 
@@ -255,11 +259,13 @@ updateResults() {
 
 
 getImgSrc(item){
-  let images =item.metadata.images;
+  let images=item.metadata.images;
   if(images){
     if(images.length >0){
       return(this.url+images[0]);
     }
+  }else{
+    return'';
   }
 
 }

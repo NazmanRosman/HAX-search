@@ -16,6 +16,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
     this.dateUpdated =  ''
     this.pageLink =  ''
     this.pageHtml =  ''
+    this.readTime =  ''
   }
 
   static get properties() {
@@ -27,6 +28,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
       dateUpdated: { type: String },
       pageLink: { type: String },
       pageHtml: { type: String },
+      readTime: { type: String },
 
     };
   }
@@ -145,8 +147,15 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
 
           <div ?hidden="${this.dateUpdated === ''}">
             <div class="info-row">
-                <span class="label"><strong>Date updated</strong></span>
+                <span class="label"><strong>Last updated</strong></span>
                 <span>${this.dateUpdated} </span>
+            </div>
+          </div>
+
+          <div ?hidden="${this.readTime === ''}">
+            <div class="info-row">
+                <span class="label"><strong>Read time</strong></span>
+                <span>${this.readTime} minutes</span>
             </div>
           </div>
 

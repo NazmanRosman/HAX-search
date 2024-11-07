@@ -152,7 +152,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
 
         <div ?hidden="${this.dateUpdated === ''}">
           <div class="info-row">
-              <span class="label"><strong>Date updated</strong></span>
+              <span class="label"><strong>Last updated</strong></span>
               <span>: ${this.dateUpdated} </span>
           </div>
         </div>
