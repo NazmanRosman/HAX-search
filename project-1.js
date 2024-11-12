@@ -180,7 +180,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
           <site-details 
           title=${this.data.title}
           description=${this.data.description}
-          logo='${this.url}${this.data.metadata.site.logo}'      
+          logo='${this.url}/${this.data.metadata.site.logo}'      
           dateCreated=${this.dateToString(this.data.metadata.site.created)}
           dateUpdated=${this.dateToString(this.data.metadata.site.updated)}
           hexCode=${this.data.metadata.theme.variables.hexCode}
@@ -201,8 +201,8 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
                   description=${item.description}
                   imageSrc='${ifDefined(this.getImgSrc(item))}'
                   dateUpdated=${this.dateToString(item.metadata.updated)}
-                  pageLink='${this.url}${item.slug}'
-                  pageHtml='${this.url}${item.location}'
+                  pageLink='${this.url}/${item.slug}'
+                  pageHtml='${this.url}/${item.location}'
                   readTime=${(item.metadata.readtime)}
                 ></site-card>
               `  
@@ -237,7 +237,8 @@ updateResults() {
     jsonUrl = this.formattedSearchQuery;
   } else{
     this.url = this.formattedSearchQuery;
-    jsonUrl = `${this.url}site.json`;
+    jsonUrl = `${this.url}/site.json`;
+    console.log(jsonUrl)
   }
 
   
@@ -270,7 +271,7 @@ getImgSrc(item){
   let images=item.metadata.images;
   if(images){
     if(images.length >0){
-      return(this.url+images[0]);
+      return(this.url+'/'+images[0]);
     }
   }else{
     return'';
