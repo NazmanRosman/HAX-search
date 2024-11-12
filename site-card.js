@@ -57,7 +57,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
       font-family: var(--ddd-font-primary, roboto);
       font-size:16px;
       color: var(--ddd-theme-primary);
-      background-color: var(--site-hex-code, --ddd-theme-accent);
+      background-color: var(--site-hex-code, --theme-accent);
     }
 
 

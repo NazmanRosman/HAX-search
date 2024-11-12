@@ -99,7 +99,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         display: flex;
         flex-direction: column;
         gap: var(--ddd-spacing-5, 20px);
-        max-width: 2000px;
+        max-width: 1500px;
         padding: 50px;
         align-items: center;
         margin: auto;
@@ -143,8 +143,10 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         
       }
       site-card {
-        flex: 1 1 400px;
+        flex: 1 1 300px;
+        /* width: 0; */
       }
+
       site-details{
         flex: 1 1 0;
         /* margin: 0 auto; */
