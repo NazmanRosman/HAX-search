@@ -219,12 +219,21 @@ updateSearchQuery(){
 }
 
 updateResults() {
-
   this.loading=true;
-  this.url = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
-  const jsonUrl = `${this.url}site.json`;
 
+  this.formattedUrl = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
+  let jsonUrl ='';
   
+  if(this.formattedUrl.endsWith("site.json")){
+    console.log(1)
+    jsonUrl = this.formattedUrl;
+    this.url =  this.formattedUrl.replace(/site\.json\/?$/, "");
+  } else{
+    jsonUrl = `${this.url}site.json`;
+    this.url = this.formattedUrl;
+    
+  }
+  // console.log(this.url)
   
   fetch(jsonUrl)
   .then(response => {
@@ -250,9 +259,6 @@ updateResults() {
   });
 
 }
-
-
-
 
 getImgSrc(item){
   let images =item.metadata.images;
