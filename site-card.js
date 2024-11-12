@@ -79,7 +79,10 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
 
     .card-container img {
       display: block;
-      height: 150px;
+      /* height: 150px; */
+      width: 250px;
+      max-height: 250px;
+      object-fit: contain;
       margin: auto;
       
     }
