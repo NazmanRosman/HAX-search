@@ -242,7 +242,7 @@ updateResults() {
       this.url = this.formattedSearchQuery+'/';
     }
     
-    jsonUrl = `${this.url}/site.json`;
+    jsonUrl = `${this.url}site.json`;
     console.log(jsonUrl)
   }
 
@@ -267,7 +267,7 @@ updateResults() {
     this.loading = false;
     this.searchResults = [];
     this.data = null;
-    console.log('fetch failesd');
+    console.log('fetch failesd: '+error);
   });
 
 }
