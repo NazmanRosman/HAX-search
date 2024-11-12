@@ -225,19 +225,19 @@ updateSearchQuery(){
 updateResults() {
   this.loading=true;
 
-  this.formattedUrl = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
+  this.formattedSearchQuery = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
+  this.url = '';
   let jsonUrl ='';
   
-  if(this.formattedUrl.endsWith("site.json")){
+  if(this.formattedSearchQuery.endsWith("site.json")){
     console.log(1)
-    jsonUrl = this.formattedUrl;
-    this.url =  this.formattedUrl.replace(/site\.json\/?$/, "");
+    this.url =  this.formattedSearchQuery.replace(/site\.json\/?$/, "");
+    jsonUrl = this.formattedSearchQuery;
   } else{
+    this.url = this.formattedSearchQuery;
     jsonUrl = `${this.url}site.json`;
-    this.url = this.formattedUrl;
-    
   }
-  // console.log(this.url)
+
   
   fetch(jsonUrl)
   .then(response => {

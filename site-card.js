@@ -51,6 +51,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
       flex-wrap: wrap;
 
       /* max-width: 400px;  */
+      min-height: 450px;
       padding: var(--ddd-spacing-5, 20px);
       border: var(--ddd-border-sm, black solid 3px);
       font-family: var(--ddd-font-primary, roboto);
