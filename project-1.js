@@ -102,7 +102,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         flex-direction: column;
         gap: var(--ddd-spacing-5, 20px);
         max-width: 1500px;
-        padding: 50px;
+        /* padding: 50px; */
         align-items: center;
         margin: auto;
       }
@@ -234,7 +234,6 @@ updateResults() {
   
   //update url and json url according to searchQuery
   if(formattedSearchQuery.endsWith("site.json")){
-    console.log(1)
     this.url =  formattedSearchQuery.replace(/site\.json\/?$/, "");
     jsonUrl = formattedSearchQuery;
   } else{
@@ -244,8 +243,9 @@ updateResults() {
       this.url = formattedSearchQuery+'/';
     }
     jsonUrl = `${this.url}site.json`;
-    console.log(jsonUrl)
   }
+  // console.log('url: ' + this.url)
+  // console.log('jsonUrl: ' + jsonUrl)
 
   //if site.json exists, update this.data and this.searchResults  
   //else this.data and this.searchResults to blank
@@ -269,7 +269,7 @@ updateResults() {
     this.loading = false;
     this.searchResults = [];
     this.data = null;
-    console.log('fetch failesd: '+error);
+    console.log('fetch failed: ');
   });
 
 }
