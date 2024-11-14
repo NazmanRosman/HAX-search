@@ -43,7 +43,6 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
 
     :host {
       display:block;
-      /* max-width: 240px; */
 
     }
 
@@ -53,7 +52,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      gap: var(--ddd-spacing-3, 20px);
+      gap: var(--ddd-spacing-3, 12px);
       flex-wrap: wrap;
 
       width: fit-content;

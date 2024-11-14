@@ -102,7 +102,6 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         flex-direction: column;
         gap: var(--ddd-spacing-5, 20px);
         max-width: 1500px;
-        /* padding: 50px; */
         align-items: center;
         margin: auto;
       }
@@ -112,7 +111,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         font: inherit;
         display: flex;
         flex-wrap: wrap;
-        gap: 5px;
+        gap: var(--ddd-spacing-1, 4px);
         width: 500px;
         max-width: 90vw;
         justify-content: center;
@@ -121,7 +120,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       .search-button{
         height: 50px;
         box-sizing: content-box;
-        padding: 0 20px;
+        padding: 0 var(--ddd-spacing-5, 20px);
         text-align: center;
         margin: auto;   
         font-size: inherit;
@@ -129,7 +128,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
       .search-input{
         height: 50px;
         flex: 1 1 0;
-        padding: 0 10px;
+        padding: 0 var(--ddd-spacing-2, 8px);
         font-size: inherit;
       }
 

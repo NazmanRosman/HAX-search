@@ -78,7 +78,6 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
 
     .card-container img {
       display: block;
-      /* height: 150px; */
       width: 250px;
       max-height: 250px;
       object-fit: contain;
@@ -98,10 +97,6 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
     .info-row {
         display: flex;
         flex-direction: column;
-        /* justify-content: flex-start; */
-        /* flex-wrap: wrap; */
-        /* gap: 10px; */
-        
     }
 
     .label {
