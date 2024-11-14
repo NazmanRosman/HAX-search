@@ -47,6 +47,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
 
     }
 
+    /* contains .image-container and .text-container */
     .container{
       display: flex;
       flex-direction: row;
@@ -57,7 +58,6 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
 
       width: fit-content;
       padding: var(--ddd-spacing-5, 20px);
-      /* border: var(--ddd-border-sm, black solid 3px); */
       font-family: var(--ddd-font-primary, roboto);
       font-size:16px;
       color: var(--ddd-theme-primary);
@@ -65,12 +65,7 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
       /* padding: 20px; */
     }
 
-
-    /* .container:focus-within,
-    .container:hover{
-      background-color: var(--ddd-theme-default-creekLight,lightcyan);  
-      color: black;
-    } */
+    /* contains title and description */
     .text-container{
       font-weight: 400;
     }
@@ -91,10 +86,6 @@ export class SiteDetails extends DDDSuper(I18NMixin(LitElement)){
       /* text-decoration: none; */
       color:  unset; 
     }
-    /* .info-row {
-        display: flex;
-
-    } */
 
     .label {
         width: 120px; /* Adjust based on your desired label width */

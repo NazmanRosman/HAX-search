@@ -95,6 +95,8 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         visibility: hidden;
         height: 1px;
       }
+
+      /* contains everything */
       .container{
         display: flex;
         flex-direction: column;
@@ -105,22 +107,17 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         margin: auto;
       }
 
-
-
+      /* contains search-input and search-button */
       .search{
         font: inherit;
-      }
-      .container .search{
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
         width: 500px;
         max-width: 90vw;
-        /* margin: 0 auto; */
         justify-content: center;
-        
-
       }
+
       .search-button{
         height: 50px;
         box-sizing: content-box;
@@ -135,6 +132,8 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
         padding: 0 10px;
         font-size: inherit;
       }
+
+      /* contains site cards */
       .results{
         display: flex;
         flex-wrap: wrap;
@@ -163,9 +162,9 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
   <h2>${this.title}</h2>
 
   <div class="search">
-    <input class="search-input" placeholder="Enter 'haxtheweb.org'"  @input="${this.updateSearchQuery}"
-    @keydown="${(e)=>{if(e.key==='Enter'){this.updateResults();}}}"/>  <!--pressing enter calls this.inputChanged-->
-    <button class="search-button" @click="${this.updateResults}"  label="analyze button">Analyze</button> <!--pressing search button calls this.inputChanged-->
+    <input class="search-input" placeholder="Enter 'haxtheweb.org'" }"
+    @keydown="${(e)=>{if(e.key==='Enter'){this.updateSearchQuery();}}}"/>  <!--pressing enter calls this.inputChanged-->
+    <button class="search-button" @click="${this.updateSearchQuery}"  label="analyze button">Analyze</button> <!--pressing search button calls this.inputChanged-->
   </div>
   
   <!-- loading -->
@@ -220,33 +219,36 @@ updated(){
   
 }
 
+// called when analyze button or enter is pressed
 updateSearchQuery(){
   this.searchQuery = this.shadowRoot.querySelector('.search-input').value;
+  this.updateResults();
 }
 
 updateResults() {
   this.loading=true;
-
-  this.formattedSearchQuery = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
+  //if searchQueary does not start with https://, format it to start with https://
+  let formattedSearchQuery = this.searchQuery.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1");
   this.url = '';
   let jsonUrl ='';
   
-  if(this.formattedSearchQuery.endsWith("site.json")){
+  //update url and json url according to searchQuery
+  if(formattedSearchQuery.endsWith("site.json")){
     console.log(1)
-    this.url =  this.formattedSearchQuery.replace(/site\.json\/?$/, "");
-    jsonUrl = this.formattedSearchQuery;
+    this.url =  formattedSearchQuery.replace(/site\.json\/?$/, "");
+    jsonUrl = formattedSearchQuery;
   } else{
-    if(this.formattedSearchQuery.endsWith("/")){
-      this.url = this.formattedSearchQuery;
+    if(formattedSearchQuery.endsWith("/")){
+      this.url = formattedSearchQuery;
     } else{
-      this.url = this.formattedSearchQuery+'/';
+      this.url = formattedSearchQuery+'/';
     }
-    
     jsonUrl = `${this.url}site.json`;
     console.log(jsonUrl)
   }
 
-  
+  //if site.json exists, update this.data and this.searchResults  
+  //else this.data and this.searchResults to blank
   fetch(jsonUrl)
   .then(response => {
     if (!response.ok) {                                   
@@ -257,7 +259,7 @@ updateResults() {
   .then(data => {
     if (data.items) {
       this.searchResults = [];
-      this.searchResults = data.items;
+      this.searchResults = data.items; 
       this.data=null;
       this.data = data;
       this.loading = false;

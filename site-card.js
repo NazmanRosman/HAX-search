@@ -42,15 +42,14 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
 
     }
 
+    /* contains .title, .image-container, and .text-container */
     .card-container{
       display: flex;
       flex-direction: column;
-      /* justify-content: center; */
-      /* align-items: center; */
+
       gap: var(--ddd-spacing-3, 20px);
       flex-wrap: wrap;
 
-      /* max-width: 400px;  */
       min-height: 450px;
       padding: var(--ddd-spacing-5, 20px);
       border: var(--ddd-border-sm, black solid 3px);
@@ -61,7 +60,7 @@ export class SiteCard extends DDDSuper(I18NMixin(LitElement)){
     }
 
 
-
+    
     .text-container{
       font-weight: 400;
       display: flex;
